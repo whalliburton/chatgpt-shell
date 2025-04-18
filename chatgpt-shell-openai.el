@@ -67,85 +67,93 @@ HANDLER, FILTER and OTHER-PARAMS."
     (:validate-command . ,(or validate-command 'chatgpt-shell-openai--validate-command))
     (:other-params . ,other-params)))
 
+
+
 (defun chatgpt-shell-openai-models ()
   "Build a list of all OpenAI LLM models available."
   ;; Context windows have been verified as of 11/26/2024.
   (list
-        (chatgpt-shell-openai-make-model
-         :version "gpt-4.1"
-         :token-width 3
-         ;; https://platform.openai.com/docs/models/gpt-4.1
-         :context-window 1280000)
-        (chatgpt-shell-openai-make-model
-         :version "chatgpt-4o-latest"
-         :token-width 3
-         ;; https://platform.openai.com/docs/models/chatgpt-4o-latest
-         :context-window 128000)
-        (chatgpt-shell-openai-make-model
-         :version "gpt-4o"
-         :token-width 3
-         ;; https://platform.openai.com/docs/models/gpt-4o
-         :context-window 128000)
-        (chatgpt-shell-openai-make-model
-         :version "gpt-4o-search-preview"
-         :token-width 3
-         ;; https://platform.openai.com/docs/models/gpt-4o-search-preview
-         :context-window 128000)
-        (chatgpt-shell-openai-make-model
-         :version "gpt-4o-mini"
-         :token-width 3
-         ;; https://platform.openai.com/docs/models/gpt-4o-mini
-         :context-window 128000)
-        (chatgpt-shell-openai-make-model
-         :version "gpt-4o-mini-search-preview"
-         :token-width 3
-         ;; https://platform.openai.com/docs/models/gpt-4o-mini-search-preview
-         :context-window 128000)
-        (chatgpt-shell-openai-make-model
-         :version "o3-mini"
-         :token-width 3
-         :context-window 200000
-         :validate-command
-         ;; TODO: Standardize whether or not a model supports system prompts.
-         (lambda (command model settings)
-           (or (chatgpt-shell-openai--validate-command command model settings)
-               (when (map-elt settings :system-prompt)
-                 (format "Model \"%s\" does not support system prompts. Please unset via \"M-x chatgpt-shell-swap-system-prompt\" by selecting None."
-                         (map-elt model :version))))))
-        (chatgpt-shell-openai-make-model
-         :version "o1"
-         :token-width 3
-         ;; https://platform.openai.com/docs/models/o1
-         :context-window 200000
-         :validate-command #'chatgpt-shell-validate-no-system-prompt)
-        (chatgpt-shell-openai-make-model
-         :version "o1-preview"
-         :token-width 3
-         ;; https://platform.openai.com/docs/models/gpt-01
-         :context-window 128000
-         :validate-command #'chatgpt-shell-validate-no-system-prompt)
-        (chatgpt-shell-openai-make-model
-         :version "o1-mini"
-         :token-width 3
-         ;; https://platform.openai.com/docs/models/gpt-01-mini
-         :context-window 128000
-         :validate-command
-         ;; TODO: Standardize whether or not a model supports system prompts.
-         (lambda (command model settings)
-           (or (chatgpt-shell-openai--validate-command command model settings)
-               (when (map-elt settings :system-prompt)
-                 (format "Model \"%s\" does not support system prompts. Please unset via \"M-x chatgpt-shell-swap-system-prompt\" by selecting None."
-                         (map-elt model :version))))))
-        (chatgpt-shell-openai-make-model
-         :version "gpt-4.5-preview"
-         :token-width 3
-         ;; https://platform.openai.com/docs/models#gpt-4-5
-         :context-window 128000)
-        (chatgpt-shell-openai-make-model
-         :version "gpt-3.5-turbo"
-         :token-width 4
-         ;; https://platform.openai.com/docs/models/gpt-3.5-turbo#gpt-3-5-turbo
-         :context-window 16385)))
+   (chatgpt-shell-openai-make-model
+    :version "gpt-4.1"
+    :token-width 3
+    ;; https://platform.openai.com/docs/models/gpt-4.1
+    :context-window 1280000)
+   (chatgpt-shell-openai-make-model
+    :version "chatgpt-4o-latest"
+    :token-width 3
+    ;; https://platform.openai.com/docs/models/chatgpt-4o-latest
+    :context-window 128000)
+   (chatgpt-shell-openai-make-model
+    :version "gpt-4o"
+    :token-width 3
+    ;; https://platform.openai.com/docs/models/gpt-4o
+    :context-window 128000)
+   (chatgpt-shell-openai-make-model
+    :version "gpt-4o-search-preview"
+    :token-width 3
+    ;; https://platform.openai.com/docs/models/gpt-4o-search-preview
+    :context-window 128000)
+   (chatgpt-shell-openai-make-model
+    :version "gpt-4o-mini"
+    :token-width 3
+    ;; https://platform.openai.com/docs/models/gpt-4o-mini
+    :context-window 128000)
+   (chatgpt-shell-openai-make-model
+    :version "gpt-4o-mini-search-preview"
+    :token-width 3
+    ;; https://platform.openai.com/docs/models/gpt-4o-mini-search-preview
+    :context-window 128000)
+   (chatgpt-shell-openai-make-model
+    :version "o3-mini"
+    :token-width 3
+    :context-window 200000
+    :validate-command
+    ;; TODO: Standardize whether or not a model supports system prompts.
+    (lambda (command model settings)
+      (or (chatgpt-shell-openai--validate-command command model settings)
+          (when (map-elt settings :system-prompt)
+            (format "Model \"%s\" does not support system prompts. Please unset via \"M-x chatgpt-shell-swap-system-prompt\" by selecting None."
+                    (map-elt model :version))))))
+   (chatgpt-shell-openai-make-model
+    :version "o4-mini"
+    :token-width 3
+    ;; https://platform.openai.com/docs/models/o4-mini
+    :context-window 128000
+    :validate-command #'chatgpt-shell-validate-no-system-prompt)
+   (chatgpt-shell-openai-make-model
+    :version "o1"
+    :token-width 3
+    ;; https://platform.openai.com/docs/models/o1
+    :context-window 200000
+    :validate-command #'chatgpt-shell-validate-no-system-prompt)
+   (chatgpt-shell-openai-make-model
+    :version "o1-preview"
+    :token-width 3
+    ;; https://platform.openai.com/docs/models/gpt-01
+    :context-window 128000
+    :validate-command #'chatgpt-shell-validate-no-system-prompt)
+   (chatgpt-shell-openai-make-model
+    :version "o1-mini"
+    :token-width 3
+    ;; https://platform.openai.com/docs/models/gpt-01-mini
+    :context-window 128000
+    :validate-command
+    ;; TODO: Standardize whether or not a model supports system prompts.
+    (lambda (command model settings)
+      (or (chatgpt-shell-openai--validate-command command model settings)
+          (when (map-elt settings :system-prompt)
+            (format "Model \"%s\" does not support system prompts. Please unset via \"M-x chatgpt-shell-swap-system-prompt\" by selecting None."
+                    (map-elt model :version))))))
+   (chatgpt-shell-openai-make-model
+    :version "gpt-4.5-preview"
+    :token-width 3
+    ;; https://platform.openai.com/docs/models#gpt-4-5
+    :context-window 128000)
+   (chatgpt-shell-openai-make-model
+    :version "gpt-3.5-turbo"
+    :token-width 4
+    ;; https://platform.openai.com/docs/models/gpt-3.5-turbo#gpt-3-5-turbo
+    :context-window 16385)))
 
 (defcustom chatgpt-shell-api-url-base "https://api.openai.com"
   "OpenAI API's base URL.
