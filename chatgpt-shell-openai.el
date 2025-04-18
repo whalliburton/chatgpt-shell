@@ -70,7 +70,13 @@ HANDLER, FILTER and OTHER-PARAMS."
 (defun chatgpt-shell-openai-models ()
   "Build a list of all OpenAI LLM models available."
   ;; Context windows have been verified as of 11/26/2024.
-  (list (chatgpt-shell-openai-make-model
+  (list
+        (chatgpt-shell-openai-make-model
+         :version "gpt-4.1"
+         :token-width 3
+         ;; https://platform.openai.com/docs/models/gpt-4.1
+         :context-window 1280000)
+        (chatgpt-shell-openai-make-model
          :version "chatgpt-4o-latest"
          :token-width 3
          ;; https://platform.openai.com/docs/models/chatgpt-4o-latest
